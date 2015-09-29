@@ -1,0 +1,22 @@
+{
+  "name": "beepboop",
+  "version": "1.0.0",
+  "description": "a twitterbot that will live forever",
+  "main": "beepboop.js",
+  "scripts": {
+    "start": "node beepboop.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "beepboop",
+    "twitterbot"
+  ],
+  "author": "brian-gerson",
+  "license": "ISC",
+  "dependencies": {
+    "twit": "^2.1.0"
+  },
+  "engines": {
+    "node": "0.12.x"
+  }
+}
