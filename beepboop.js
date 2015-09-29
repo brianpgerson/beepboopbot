@@ -1,3 +1,11 @@
+// START HEROKU SETUP
+var express = require("express");
+var app = express();
+app.get('/', function(req, res){ res.send('The robot is happily running.'); });
+app.listen(process.env.PORT || 5000);
+// END HEROKU SETUP
+
+
 var Twit = require('twit');
 var Bot = new Twit({
 	consumer_key: "pblDOPyFKEZW44JiqAXhApqRE"

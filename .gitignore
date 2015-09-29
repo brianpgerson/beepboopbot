@@ -1,9 +1,15 @@
-/node_modules
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
 
-db/*.sqlite3
-/db/*.sqlite3-journal
-/log/*
-/tmp/*
+pids
+logs
+results
 
-.DS_Store
-
+node_modules
+npm-debug.log
