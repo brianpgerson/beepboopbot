@@ -119,17 +119,14 @@ function compareAgainstFollowers(friendsList, callback){
 
 //is the user someone I've requested friendship from already but remains pending?
 function testForKeba(newFriends, callback){
-	console.log(newFriends)
 	for (i=0; i<newFriends.length; i++){
-		console.log(newFriends[i]);
 		Bot.get('friendships/show', {source_screen_name: "a_really_human", target_id: newFriends[i]}, 
 			function (err, data, response){
 				if (!err){
-					console.log(data);
 					if (data.relationship.target.following_received != true){
 						callback(data.relationship.target.id);
 					} else {
-						console.log("Already requested this user: " + data.relationship.target.id);
+						console.log("Already requested this user. It's probably Keba: " + data.relationship.target.id);
 					}
 				} else {
 					console.log("Testing Keba retur ned an error: " + err);
