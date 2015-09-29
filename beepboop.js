@@ -140,7 +140,7 @@ function createFriendship(newFriend){
 	Bot.post('friendships/create', {user_id: newFriend},
 		function (err, data, response){
 			if(!err){
-				console.log("It worked! You followed a new user: " + newFriend);
+				console.log("It worked! You followed a new user, ID: " + newFriend);
 			} else {
 				console.log("Nobody new, nobody in the queue. " + err)
 			}
