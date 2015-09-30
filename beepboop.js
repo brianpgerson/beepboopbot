@@ -156,7 +156,7 @@ function createFriendship(newFriend){
 }
 
 //========================================
-// RETWEET BEHAVIOR
+// RETWEET
 //========================================
 
 function searchForRetweets(callback){
@@ -181,7 +181,6 @@ function makeRetweet(tweetId, tweet){
 		})
 }
 
-]
 
 //========================================
 // SCRIPTING
@@ -216,12 +215,12 @@ function retweetBehavior(){
 
 
 
-var interval = (Math.floor(Math.random() * (1200000 - 1000000) + 1000000))
+var interval = (Math.floor(Math.random() * (1200000 - 1000000) + 1000000));
 friendsBehavior();
 replyBehavior();
-retweetBehavior();
+// retweetBehavior();
 setInterval(friendsBehavior, interval); 
 setInterval(replyBehavior, interval); 
-setInterval(retweetBehavior, interval); 
+// setInterval(retweetBehavior, interval); 
 
 
