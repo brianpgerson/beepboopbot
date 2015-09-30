@@ -40,7 +40,7 @@ var responses = [
 
 //find the most recent tweet asking if someone is a robot,
 //then pull the username, user ID, and tweet ID associated with it.
-function searchForFodder(callback){
+function searchForVictims(callback){
 	Bot.get('search/tweets', {q: "%22are%20you%20a%20robot%22", result_type: "recent"}, 
 		function (err, data, response) {
 			if (!err) { 
@@ -161,8 +161,8 @@ function createFriendship(newFriend){
 //========================================
 
 
-function commsBehavior(){
-	searchForFodder(function(resultsForRepeatCheck){
+function replyBehavior(){
+	searchForVictims(function(resultsForRepeatCheck){
 		checkForRepeat(resultsForRepeatCheck, (function(resultsForFollowReply){
 			followAndReply(resultsForFollowReply);
 		}));
@@ -182,10 +182,12 @@ function friendsBehavior(){
 }
 
 
-
+var interval = (Math.floor(Math.random() * (1200000 - 1000000) + 1000000))
 friendsBehavior();
-commsBehavior();
+replyBehavior();
+retweetBehavior();
 setInterval(friendsBehavior, 1200000); 
-setInterval(commsBehavior, 1200000); 
+setInterval(replyBehavior, 1200000); 
+setInterval(retweetBehavior, 1200000); 
 
 
