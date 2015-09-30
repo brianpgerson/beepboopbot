@@ -155,6 +155,33 @@ function createFriendship(newFriend){
 		});
 }
 
+//========================================
+// RETWEET BEHAVIOR
+//========================================
+
+function searchForRetweets(callback){
+	Bot.get('search/tweets', {q: 'robots%20OR%20robot%20filter:links', result_type: "recent", lang: "en", count: 1}, 
+		function (err, data, response) {
+			if (!err) { 
+				callback(data.statuses[0].id_str, data.statuses[0].text);
+				
+			} else {
+				console.log("Search Error: " + err);
+			}
+		});
+
+}
+
+function makeRetweet(tweetId, tweet){
+	Bot.post('statuses/retweet/:id', {id: tweetId},
+		function (err, data, response) {
+			if (!err){
+				console.log("Retweeted this shiza: " + data)
+			}
+		})
+}
+
+]
 
 //========================================
 // SCRIPTING
@@ -181,13 +208,20 @@ function friendsBehavior(){
 	});
 }
 
+function retweetBehavior(){
+	searchForRetweets(function(searchResults){
+		makeRetweet(searchResults);
+	});
+}
+
+
 
 var interval = (Math.floor(Math.random() * (1200000 - 1000000) + 1000000))
 friendsBehavior();
 replyBehavior();
 retweetBehavior();
-setInterval(friendsBehavior, 1200000); 
-setInterval(replyBehavior, 1200000); 
-setInterval(retweetBehavior, 1200000); 
+setInterval(friendsBehavior, interval); 
+setInterval(replyBehavior, interval); 
+setInterval(retweetBehavior, interval); 
 
 
