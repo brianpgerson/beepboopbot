@@ -163,6 +163,7 @@ function searchForRetweets(callback){
 	Bot.get('search/tweets', {q: 'robots%20OR%20robot%20filter:links', result_type: "recent", lang: "en", count: 1}, 
 		function (err, data, response) {
 			if (!err) { 
+				console.log(data.statuses[0].text)
 				callback(data.statuses[0].id_str, data.statuses[0].text);
 				
 			} else {
@@ -176,7 +177,7 @@ function makeRetweet(tweetId, tweet){
 	Bot.post('statuses/retweet/:id', {id: tweetId},
 		function (err, data, response) {
 			if (!err){
-				console.log("Retweeted this shiza: " + data)
+				console.log("Retweeted this shiza: " + tweet)
 			}
 		})
 }
