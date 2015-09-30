@@ -59,7 +59,7 @@ function searchForVictims(callback){
 //grab my last tweet to make sure I don't repeat a reply to the same person.
 //check by comparing my last tweet's 'reply to' ID against the ID I just pulled
 function checkForRepeat(victimInfo, callback){
-	Bot.get('statuses/user_timeline', {screen_name: 'a_really_human'}, 
+	Bot.get('statuses/user_timeline', {screen_name: 'a_really_human', include_rts: false}, 
 		function (err, data, response){
 			if (!err) {
 				var lastTweeter = data[0].in_reply_to_user_id;
@@ -218,9 +218,9 @@ function retweetBehavior(){
 var interval = (Math.floor(Math.random() * (1200000 - 1000000) + 1000000));
 friendsBehavior();
 replyBehavior();
-// retweetBehavior();
+retweetBehavior();
 setInterval(friendsBehavior, interval); 
 setInterval(replyBehavior, interval); 
-// setInterval(retweetBehavior, interval); 
+setInterval(retweetBehavior, interval); 
 
 
