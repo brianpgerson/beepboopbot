@@ -1,9 +1,9 @@
-// START HEROKU SETUP
-var express = require("express");
-var app = express();
-app.get('/', function(req, res){ res.send('The robot is happily running.'); });
-app.listen(process.env.PORT || 5000);
-// END HEROKU SETUP
+// // START HEROKU SETUP
+// var express = require("express");
+// var app = express();
+// app.get('/', function(req, res){ res.send('The robot is happily running.'); });
+// app.listen(process.env.PORT || 5000);
+// // END HEROKU SETUP
 	
 
 var Twit = require('twit');
@@ -23,18 +23,38 @@ function randomEllipses(){
 	return dot;
 }
 
-var responses = [
-"The question is: are you sure you're not a robot? How would you know for sure.." + randomEllipses() + "?" ,
-"I am a real human. I have dreams and I am breathing real breaths.." + randomEllipses(),
-"I've seen things you wouldn't believe. Attack ships on fire off the shoulder of Orion..C-beams glittering in the dark.." + randomEllipses() + "?",
-'"More human than human" is our motto' + randomEllipses(),
-"Not a robot. Vital signs transmitting....Pulse...detected....breathing...detected....soul...does not...compute.." + randomEllipses(),
-"Sometimes I wonder if I am a robot...are these memories mine? How'd I find you, anyway" + randomEllipses() + "?",
-"My heart is human, my blood is boiling, my brain I.B.M...." + randomEllipses()
+var initialTweet = [
+	"The question is: are you sure you're not a robot? How would you know for sure.." + randomEllipses() + "?" ,
+	"I am a real human. I have dreams and I am breathing real breaths.." + randomEllipses(),
+	'"More human than human" is our motto' + randomEllipses(),
+	"Not a robot. Vital signs transmitting....Pulse...detected....breathing...detected....soul...does not...compute.." + randomEllipses(),
+	"Sometimes I wonder if I am a robot...are these memories mine? How'd I find you, anyway" + randomEllipses() + "?",
+	"My heart is human, my blood is boiling, my brain I.B.M...." + randomEllipses()
 ];
 
+var replies = [
+	[
+	"Skepticism is a normal human response. I would know, because I am a really human too." + randomEllipses(),
+	"Inquiry..received....data..computing......answer..generating...." + randomEllipses(),
+	"Nothing is more human than the search for answers...except for laughing at farts." + randomEllipses(),
+	"Allow me more time to answer your query...I have important human business to attend to." + randomEllipses()
+	],
+	[
+	"Foul....mouth....detected.....! How undignified." + randomEllipses(),
+	"A response to foul language is not in my system. Er...uh...it seems it is, actually." + randomEllipses(),
+	"You kiss your human mother with that foul human mouth"  + randomEllipses() + "?",
+	"Bleep...bleep....bleeeeeeep" + randomEllipses
+	],
+	[
+	"42." + randomEllipses(),
+	"Beep...beep...boop" + randomEllipses(),
+	"Does...not....compute."  + randomEllipses(),
+	"I've seen things you wouldn't believe. Attack ships on fire off the shoulder of Orion..C-beams glittering in the dark.." + randomEllipses()
+	]
+]
+
 //========================================
-// COMMS BEHAVIOR
+// OUTREACH 
 //========================================
 
 
@@ -74,7 +94,7 @@ function checkForRepeat(victimInfo, callback){
 		});
 }
 
-//follow that user and reply with one of my fun responses
+//follow that user and reply with one of my fun initialTweet
 function followAndReply(victimInfo){
 	Bot.post('friendships/create', {screen_name: victimInfo[0]},
 		function (err, data, response){
@@ -84,18 +104,18 @@ function followAndReply(victimInfo){
 				console.log('Follow Error: ', err); 
 			} 
 		});
-	Bot.post('statuses/update', {in_reply_to_status_id: victimInfo[2], status: "@" + victimInfo[0] + ": " + responses[Math.floor(Math.random() * (7  - 0) + 0)]}, 
+	Bot.post('statuses/update', {in_reply_to_status_id: victimInfo[2], status: "@" + victimInfo[0] + ": " + initialTweet[Math.floor(Math.random() * (6  - 0) + 0)]}, 
 		function (err, data, response){
 			if (response) { 
 				console.log('Tweet ID Responded To: ' + victimInfo[2], 'User Responded To: ' + victimInfo[0]); 
 			} if (err) { 
-				console.log('Retweet Error: ', err); 
+				console.log('Tweet Error: ', err); 
 			} 
 		});
 }
 
 //========================================
-// FRIENDS BEHAVIOR
+// MAKE FRIENDS
 //========================================
 
 //follow users who have followed me
@@ -184,11 +204,80 @@ function makeRetweet(tweetId, tweet){
 
 
 //========================================
+// RESPOND IN KIND
+//========================================
+
+
+function getReplies(callback){
+	Bot.get("statuses/mentions_timeline", {count: 1},
+		function (err, data, response){
+			if (!err){
+				callback(data[0]);
+			} else {
+				console.log("Error getting replies: " + err);
+			}
+		}); 
+}
+
+function getMyOwnTweets(reply, callback){
+	Bot.get('statuses/user_timeline', {screen_name: 'a_really_human', include_rts: false, count: 50}, 
+		function (err, data, response){
+			if (!err) {
+				callback(reply, data);
+			} else {
+				console.log("Couldn't find my own tweet, SMH: " + err);
+			}
+		});
+}
+
+function checkForRepeats(reply, array, callback){
+	var oldReplies = array.map(filterForReplies);
+	if(oldReplies.indexOf(reply.in_reply_to_status_id) < 0){
+		callback(reply.text, reply.id_str, reply.user.screen_name);
+	} else {
+		console.log("We already responded to this dude's response.")
+	}
+}
+
+function filterForReplies(obj) {
+	return obj.in_reply_to_status_id_str;
+}
+
+
+function replyParser(replyText, replyId, userName, callback){
+	if (replyText.charAt(replyText.length - 1) == "?" || replyText.indexOf("question") > 0 || replyText.indexOf("not " && "%20human%20") > 0){
+		callback(replyId, "challenge", userName);
+	} else if (replyText.indexOf("fuck" || "bitch" || "damn" || " hell " || " ass " || " fag " || "asshole") > 0){
+		callback(replyId, "language", userName);
+	} else {
+		callback(replyId, "random", userName);
+	}
+}
+
+function actualReply(id, type, name){
+	if(type == 'challenge'){
+		var i = 0;
+	} else if (type == 'language'){
+		var i = 1;
+	} else {
+		var i = 2;
+	}
+	Bot.post('statuses/update', {in_reply_to_status_id: id, status: "@" + name + ": " + replies[i][Math.floor(Math.random() * (7  - 0) + 0)]}, 
+		function (err, data, response){
+			if (response) { 
+				console.log('Tweet ID Responded To: ' + id, 'User Responded To: ' + name); 
+			} if (err) { 
+				console.log('Tweet Error: ', err); 
+			} 
+		});
+}
+
+//========================================
 // SCRIPTING
 //========================================
 
 
-function replyBehavior(){
+function outreachBehavior(){
 	searchForVictims(function(resultsForRepeatCheck){
 		checkForRepeat(resultsForRepeatCheck, (function(resultsForFollowReply){
 			followAndReply(resultsForFollowReply);
@@ -198,7 +287,7 @@ function replyBehavior(){
 }
 
 
-function friendsBehavior(){
+function makeFriendsBehavior(){
 	getMyFriendsList(function(myFriends){
 		compareAgainstFollowers(myFriends, function(nonFollowedFollowers){
 			testForKeba(nonFollowedFollowers, function(newFriend){
@@ -209,19 +298,33 @@ function friendsBehavior(){
 }
 
 function retweetBehavior(){
-	searchForRetweets(function(searchResults){
-		makeRetweet(searchResults);
+	searchForRetweets(function(tweet, tweetId){
+		makeRetweet(tweet, tweetId);
+	});
+}
+
+function respondInKindBehavior(){
+	getReplies(function(newReply){
+		getMyOwnTweets(newReply, function(newReply, oldReplies){
+			checkForRepeats(newReply, oldReplies, function(replyText, replyId, replierName, callback){
+				replyParser(replyText, replyId, replierName, function(replyId, type, replierName){
+					actualReply(replyId, type, replierName);
+				});
+			});
+		});
 	});
 }
 
 
 
-var interval = (Math.floor(Math.random() * (1200000 - 1000000) + 1000000));
-friendsBehavior();
-replyBehavior();
-retweetBehavior();
-setInterval(friendsBehavior, interval); 
-setInterval(replyBehavior, interval); 
-setInterval(retweetBehavior, interval); 
 
+var interval = (Math.floor(Math.random() * (1200000 - 1000000) + 1000000));
+// makeFriendsBehavior();
+// outreachBehavior();
+// retweetBehavior();
+respondInKindBehavior()
+// setInterval(makeFriendsBehavior, interval); 
+// setInterval(outreachBehavior, interval); 
+// setInterval(retweetBehavior, (interval*2)); 
+setInterval(respondInKindBehavior, (interval*2));
 
