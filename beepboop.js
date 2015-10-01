@@ -1,9 +1,9 @@
-// // START HEROKU SETUP
-// var express = require("express");
-// var app = express();
-// app.get('/', function(req, res){ res.send('The robot is happily running.'); });
-// app.listen(process.env.PORT || 5000);
-// // END HEROKU SETUP
+// START HEROKU SETUP
+var express = require("express");
+var app = express();
+app.get('/', function(req, res){ res.send('The robot is happily running.'); });
+app.listen(process.env.PORT || 5000);
+// END HEROKU SETUP
 	
 
 var Twit = require('twit');
@@ -223,7 +223,7 @@ function getMyOwnTweets(reply, callback){
 	Bot.get('statuses/user_timeline', {screen_name: 'a_really_human', include_rts: false, count: 50}, 
 		function (err, data, response){
 			if (!err) {
-				callback(reply, data);
+				console.log(reply, data);
 			} else {
 				console.log("Couldn't find my own tweet, SMH: " + err);
 			}
@@ -306,11 +306,11 @@ function retweetBehavior(){
 function respondInKindBehavior(){
 	getReplies(function(newReply){
 		getMyOwnTweets(newReply, function(newReply, oldReplies){
-			checkForRepeats(newReply, oldReplies, function(replyText, replyId, replierName, callback){
-				replyParser(replyText, replyId, replierName, function(replyId, type, replierName){
-					actualReply(replyId, type, replierName);
-				});
-			});
+			// checkForRepeats(newReply, oldReplies, function(replyText, replyId, replierName, callback){
+			// 	replyParser(replyText, replyId, replierName, function(replyId, type, replierName){
+			// 		console.log(replyId, type, replierName);
+			// 	});
+			// });
 		});
 	});
 }
@@ -319,12 +319,12 @@ function respondInKindBehavior(){
 
 
 var interval = (Math.floor(Math.random() * (1200000 - 1000000) + 1000000));
-makeFriendsBehavior();
-outreachBehavior();
-retweetBehavior();
+// makeFriendsBehavior();
+// outreachBehavior();
+// retweetBehavior();
 respondInKindBehavior()
-setInterval(makeFriendsBehavior, interval); 
-setInterval(outreachBehavior, interval); 
-setInterval(retweetBehavior, (interval*2)); 
+// setInterval(makeFriendsBehavior, interval); 
+// setInterval(outreachBehavior, interval); 
+// setInterval(retweetBehavior, (interval*2)); 
 setInterval(respondInKindBehavior, (interval*2));
 
