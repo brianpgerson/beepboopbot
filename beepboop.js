@@ -262,7 +262,7 @@ function actualReply(id, type, name){
 	} else {
 		var i = 2;
 	}
-	Bot.post('statuses/update', {in_reply_to_status_id: id, status: "@" + name + ": " + replies[i][Math.floor(Math.random() * (7  - 0) + 0)]}, 
+	Bot.post('statuses/update', {in_reply_to_status_id: id, status: "@" + name + ": " + replies[i][Math.floor(Math.random() * (4- 0) + 0)]}, 
 		function (err, data, response){
 			if (response) { 
 				console.log('Tweet ID Responded To: ' + id, 'User Responded To: ' + name); 
@@ -319,12 +319,12 @@ function respondInKindBehavior(){
 
 
 var interval = (Math.floor(Math.random() * (1200000 - 1000000) + 1000000));
-// makeFriendsBehavior();
-// outreachBehavior();
-// retweetBehavior();
+makeFriendsBehavior();
+outreachBehavior();
+retweetBehavior();
 respondInKindBehavior()
-// setInterval(makeFriendsBehavior, interval); 
-// setInterval(outreachBehavior, interval); 
-// setInterval(retweetBehavior, (interval*2)); 
+setInterval(makeFriendsBehavior, interval); 
+setInterval(outreachBehavior, interval); 
+setInterval(retweetBehavior, (interval*2)); 
 setInterval(respondInKindBehavior, (interval*2));
 
