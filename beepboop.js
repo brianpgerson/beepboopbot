@@ -207,12 +207,11 @@ function makeRetweet(tweetId, tweet){
 // RESPOND IN KIND
 //========================================
 
-
+//find the most recent tweet that mentions my username
 function getMentions(callback){
 	Bot.get("statuses/mentions_timeline", {count: 1},
 		function (err, data, response){
 			if (!err){
-				console.log(data[0]);
 				callback(data[0]);
 			} else {
 				console.log("Error getting replies: " + err);
@@ -220,11 +219,11 @@ function getMentions(callback){
 		}); 
 }
 
+//get a list of my most recent tweets that aren't retweets
 function getMyOwnTweets(mention, callback){
-	Bot.get('statuses/user_timeline', {screen_name: 'a_really_human', include_rts: false, count: 20}, 
+	Bot.get('statuses/user_timeline', {screen_name: 'a_really_human', include_rts: false, count: 50}, 
 		function (err, data, response){
 			if (!err) {
-				console.log(mention);
 				callback(mention, data);
 			} else {
 				console.log("Couldn't find my own tweet, SMH: " + err);
@@ -232,6 +231,7 @@ function getMyOwnTweets(mention, callback){
 		});
 }
 
+//see if any of my most recent tweets are in reply to the tweet that mentions me already
 function checkForRepeats(mention, myTweets, callback){
 	var oldReplies = myTweets.map(filterForReplies);
 	if(oldReplies.indexOf(mention.id_str) < 0){
@@ -249,7 +249,7 @@ function filterForReplies(obj) {
 function replyParser(mentionText, mentionId, mentionerName, callback){
 	if (mentionText.charAt(mentionText.length - 1) == "?" || mentionText.indexOf("question") > 0 || mentionText.indexOf("not " && "%20human%20") > 0){
 		callback(mentionId, "challenge", mentionerName);
-	} else if (mentionText.indexOf("fuck" || "bitch" || "damn" || " hell " || " ass " || " fag " || "asshole") > 0){
+	} else if (mentionText.indexOf("fuck" || "bitch" || "damn" || " hell%20" || " ass%20" || " fag " || "asshole") > 0){
 		callback(mentionId, "language", mentionerName);
 	} else {
 		callback(mentionId, "random", mentionerName);
