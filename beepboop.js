@@ -208,10 +208,11 @@ function makeRetweet(tweetId, tweet){
 //========================================
 
 
-function getReplies(callback){
+function getMentions(callback){
 	Bot.get("statuses/mentions_timeline", {count: 1},
 		function (err, data, response){
 			if (!err){
+				console.log(data[0]);
 				callback(data[0]);
 			} else {
 				console.log("Error getting replies: " + err);
@@ -219,21 +220,22 @@ function getReplies(callback){
 		}); 
 }
 
-function getMyOwnTweets(reply, callback){
-	Bot.get('statuses/user_timeline', {screen_name: 'a_really_human', include_rts: false, count: 50}, 
+function getMyOwnTweets(mention, callback){
+	Bot.get('statuses/user_timeline', {screen_name: 'a_really_human', include_rts: false, count: 20}, 
 		function (err, data, response){
 			if (!err) {
-				console.log(reply, data);
+				console.log(mention);
+				callback(mention, data);
 			} else {
 				console.log("Couldn't find my own tweet, SMH: " + err);
 			}
 		});
 }
 
-function checkForRepeats(reply, array, callback){
-	var oldReplies = array.map(filterForReplies);
-	if(oldReplies.indexOf(reply.in_reply_to_status_id) < 0){
-		callback(reply.text, reply.id_str, reply.user.screen_name);
+function checkForRepeats(mention, myTweets, callback){
+	var oldReplies = myTweets.map(filterForReplies);
+	if(oldReplies.indexOf(mention.id_str) < 0){
+		callback(mention.text, mention.id_str, mention.user.screen_name);
 	} else {
 		console.log("We already responded to this dude's response.")
 	}
@@ -244,13 +246,13 @@ function filterForReplies(obj) {
 }
 
 
-function replyParser(replyText, replyId, userName, callback){
-	if (replyText.charAt(replyText.length - 1) == "?" || replyText.indexOf("question") > 0 || replyText.indexOf("not " && "%20human%20") > 0){
-		callback(replyId, "challenge", userName);
-	} else if (replyText.indexOf("fuck" || "bitch" || "damn" || " hell " || " ass " || " fag " || "asshole") > 0){
-		callback(replyId, "language", userName);
+function replyParser(mentionText, mentionId, mentionerName, callback){
+	if (mentionText.charAt(mentionText.length - 1) == "?" || mentionText.indexOf("question") > 0 || mentionText.indexOf("not " && "%20human%20") > 0){
+		callback(mentionId, "challenge", mentionerName);
+	} else if (mentionText.indexOf("fuck" || "bitch" || "damn" || " hell " || " ass " || " fag " || "asshole") > 0){
+		callback(mentionId, "language", mentionerName);
 	} else {
-		callback(replyId, "random", userName);
+		callback(mentionId, "random", mentionerName);
 	}
 }
 
@@ -304,13 +306,13 @@ function retweetBehavior(){
 }
 
 function respondInKindBehavior(){
-	getReplies(function(newReply){
-		getMyOwnTweets(newReply, function(newReply, oldReplies){
-			// checkForRepeats(newReply, oldReplies, function(replyText, replyId, replierName, callback){
-			// 	replyParser(replyText, replyId, replierName, function(replyId, type, replierName){
-			// 		console.log(replyId, type, replierName);
-			// 	});
-			// });
+	getMentions(function(newMention){
+		getMyOwnTweets(newMention, function(newMention, oldReplies){
+			checkForRepeats(newMention, oldReplies, function(mentionText, mentionId, mentionerName, callback){
+				replyParser(mentionText, mentionId, mentionerName, function(mentionId, type, mentionerName){
+					console.log(mentionId, type, mentionerName);
+				});
+			});
 		});
 	});
 }
@@ -319,12 +321,12 @@ function respondInKindBehavior(){
 
 
 var interval = (Math.floor(Math.random() * (1200000 - 1000000) + 1000000));
-// makeFriendsBehavior();
-// outreachBehavior();
-// retweetBehavior();
+makeFriendsBehavior();
+outreachBehavior();
+retweetBehavior();
 respondInKindBehavior()
-// setInterval(makeFriendsBehavior, interval); 
-// setInterval(outreachBehavior, interval); 
-// setInterval(retweetBehavior, (interval*2)); 
+setInterval(makeFriendsBehavior, interval); 
+setInterval(outreachBehavior, interval); 
+setInterval(retweetBehavior, (interval*2)); 
 setInterval(respondInKindBehavior, (interval*2));
 
