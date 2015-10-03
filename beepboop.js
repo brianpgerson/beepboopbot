@@ -103,7 +103,7 @@ function followAndReply(victimInfo){
 				console.log('Follow Error: ', err); 
 			} 
 		});
-	Bot.post('statuses/update', {in_reply_to_status_id: victimInfo[2], status: "@" + victimInfo[0] + ": " + initialTweet[Math.floor(Math.random() * (6  - 0) + 0)]}, 
+	Bot.post('statuses/update', {id: victimInfo[2], status: "@" + victimInfo[0] + ": " + initialTweet[Math.floor(Math.random() * (6  - 0) + 0)]}, 
 		function (err, data, response){
 			if (response) { 
 				console.log('Tweet ID Responded To: ' + victimInfo[2], 'User Responded To: ' + victimInfo[0]); 
@@ -182,8 +182,8 @@ function searchForRetweets(callback){
 	Bot.get('search/tweets', {q: 'robots%20OR%20robot%20filter:links', result_type: "recent", lang: "en", count: 1}, 
 		function (err, data, response) {
 			if (!err) { 
-				console.log(data.statuses[0].text)
-				callback(data.statuses[0].id_str, data.statuses[0].text);
+				data.statuses[0].text != undefined ? callback(data.statuses[0].id_str, data.statuses[0].text) : console.log("no text here...that's weird.");
+				
 				
 			} else {
 				console.log("Search Error: " + err);
@@ -197,6 +197,8 @@ function makeRetweet(tweetId, tweet){
 		function (err, data, response) {
 			if (!err){
 				console.log("Retweeted this shiza: " + tweet)
+			} else {
+				console.log("Retweet didn't work: " + err);
 			}
 		})
 }
@@ -234,7 +236,7 @@ function getMyOwnTweets(mention, callback){
 function checkForRepeats(mention, myTweets, callback){
 	var oldReplies = myTweets.map(filterForReplies);
 	if(oldReplies.indexOf(mention.id_str) < 0){
-		callback(mention.text, mention.in_reply_to_status_id_str, mention.user.screen_name);
+		callback(mention.text, mention.id_str, mention.user.screen_name);
 	} else {
 		console.log("We already responded to this dude's response.")
 	}
@@ -266,7 +268,7 @@ function actualReply(id, type, name){
 	Bot.post('statuses/update', {in_reply_to_status_id: id, status: "@" + name + ": " + replies[i][Math.floor(Math.random() * (4- 0) + 0)]}, 
 		function (err, data, response){
 			if (response) { 
-				console.log('Tweet ID Responded To: ' + id, 'User Responded To: ' + name, 'tweetTe'); 
+				console.log('Tweet ID Responded To: ' + id, 'User Responded To: ' + name); 
 			} if (err) { 
 				console.log('Tweet Error: ', err); 
 			} 
@@ -309,7 +311,7 @@ function respondInKindBehavior(){
 		getMyOwnTweets(newMention, function(newMention, oldReplies){
 			checkForRepeats(newMention, oldReplies, function(mentionText, mentionId, mentionerName, callback){
 				replyParser(mentionText, mentionId, mentionerName, function(mentionId, type, mentionerName){
-					console.log(mentionId, type, mentionerName);
+					actualReply(mentionId, type, mentionerName);
 				});
 			});
 		});
