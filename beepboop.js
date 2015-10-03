@@ -234,7 +234,7 @@ function getMyOwnTweets(mention, callback){
 function checkForRepeats(mention, myTweets, callback){
 	var oldReplies = myTweets.map(filterForReplies);
 	if(oldReplies.indexOf(mention.id_str) < 0){
-		callback(mention.text, mention.id_str, mention.user.screen_name);
+		callback(mention.text, mention.in_reply_to_status_id_str, mention.user.screen_name);
 	} else {
 		console.log("We already responded to this dude's response.")
 	}
