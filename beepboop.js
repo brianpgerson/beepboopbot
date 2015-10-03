@@ -46,9 +46,9 @@ var replies = [
 	"Bleep...bleep....bleeeeeeep" + randomEllipses
 	],
 	[
-	"42." + randomEllipses(),
-	"Beep...beep...boop" + randomEllipses(),
-	"Does...not....compute."  + randomEllipses(),
+	"You humans are so cute when you are confused. I mean we humans are so cute when we are confused." + randomEllipses(),
+	"Beep...beep...boop...BEEP....BEEP BEEP BOOOOOOOOOOOP!" + randomEllipses(),
+	"Does...not....compute. Please try again. Systems....listening....."  + randomEllipses(),
 	"I've seen things you wouldn't believe. Attack ships on fire off the shoulder of Orion..C-beams glittering in the dark.." + randomEllipses()
 	]
 ]
@@ -56,7 +56,6 @@ var replies = [
 //========================================
 // OUTREACH 
 //========================================
-
 
 //find the most recent tweet asking if someone is a robot,
 //then pull the username, user ID, and tweet ID associated with it.
@@ -267,7 +266,7 @@ function actualReply(id, type, name){
 	Bot.post('statuses/update', {in_reply_to_status_id: id, status: "@" + name + ": " + replies[i][Math.floor(Math.random() * (4- 0) + 0)]}, 
 		function (err, data, response){
 			if (response) { 
-				console.log('Tweet ID Responded To: ' + id, 'User Responded To: ' + name); 
+				console.log('Tweet ID Responded To: ' + id, 'User Responded To: ' + name, 'tweetTe'); 
 			} if (err) { 
 				console.log('Tweet Error: ', err); 
 			} 
