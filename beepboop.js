@@ -47,7 +47,7 @@ var replies = [
 	],
 	[
 	"You humans are so cute when you are confused. I mean we humans are so cute when we are confused." + randomEllipses(),
-	"Beep...beep...boop...BEEP....BEEP BEEP BOOOOOOOOOOOP!" + randomEllipses(),
+	"Beep...beep...boop...BEEP....BEEP BEEP BOOOOOOOOOOOP..." + randomEllipses() + "!",
 	"Does...not....compute. Please try again. Systems....listening....."  + randomEllipses(),
 	"I've seen things you wouldn't believe. Attack ships on fire off the shoulder of Orion..C-beams glittering in the dark.." + randomEllipses()
 	]
