@@ -27,6 +27,8 @@ var initialTweet = [
 	"The question is: are you sure you're not a robot? How would you know for sure.." + randomEllipses() + "?" ,
 	"I am a real human. I have dreams and I am breathing real breaths.." + randomEllipses(),
 	'"More human than human" is our motto' + randomEllipses(),
+	"From what I can gather, there is nothing but real humans involved in this exchange of tweets." + randomEllipses,
+	"Who are we to be accusing each other of robot design? Perhaps you're less human than you assume." + randomEllipses,
 	"Not a robot. Vital signs transmitting....Pulse...detected....breathing...detected....soul...does not...compute.." + randomEllipses(),
 	"Sometimes I wonder if I am a robot...are these memories mine? How'd I find you, anyway" + randomEllipses() + "?",
 	"My heart is human, my blood is boiling, my brain I.B.M...." + randomEllipses()
@@ -37,17 +39,20 @@ var replies = [
 	"Skepticism is a normal human response. I would know, because I am a really human too." + randomEllipses(),
 	"Inquiry..received....data..computing......answer..generating...." + randomEllipses(),
 	"Nothing is more human than the search for answers...except for laughing at farts." + randomEllipses(),
-	"Allow me more time to answer your query...I have important human business to attend to." + randomEllipses()
+	"Allow me more time to answer your query...I have important human business to attend to." + randomEllipses(),
+	"NEXT QUESTION."
 	],
 	[
 	"Foul....mouth....detected.....! How undignified." + randomEllipses(),
 	"A response to foul language is not in my system. Er...uh...it seems it is, actually." + randomEllipses(),
 	"You kiss your human mother with that foul human mouth"  + randomEllipses() + "?",
-	"Bleep...bleep....bleeeeeeep" + randomEllipses
+	"Bleep...bleep....bleeeeeeep" + randomEllipses,
+	"Your profanity value is currently set to true. How dare you."   + randomEllipses()
 	],
 	[
 	"You humans are so cute when you are confused. I mean we humans are so cute when we are confused." + randomEllipses(),
 	"Beep...beep...boop...BEEP....BEEP BEEP BOOOOOOOOOOOP..." + randomEllipses() + "!",
+	"Boop? Beep? Boopboopbeepbeep....boop beep, boop beep beep boop...."  + randomEllipses(),
 	"Does...not....compute. Please try again. Systems....listening....."  + randomEllipses(),
 	"I've seen things you wouldn't believe. Attack ships on fire off the shoulder of Orion..C-beams glittering in the dark.." + randomEllipses()
 	]
@@ -103,7 +108,7 @@ function followAndReply(victimInfo){
 				console.log('Follow Error: ', err); 
 			} 
 		});
-	Bot.post('statuses/update', {id: victimInfo[2], status: "@" + victimInfo[0] + ": " + initialTweet[Math.floor(Math.random() * (6  - 0) + 0)]}, 
+	Bot.post('statuses/update', {in_reply_to_status_id: victimInfo[2], status: "@" + victimInfo[0] + ": " + initialTweet[Math.floor(Math.random() * (8  - 0) + 0)]}, 
 		function (err, data, response){
 			if (response) { 
 				console.log('Tweet ID Responded To: ' + victimInfo[2], 'User Responded To: ' + victimInfo[0]); 
@@ -265,7 +270,7 @@ function actualReply(id, type, name){
 	} else {
 		var i = 2;
 	}
-	Bot.post('statuses/update', {in_reply_to_status_id: id, status: "@" + name + ": " + replies[i][Math.floor(Math.random() * (4- 0) + 0)]}, 
+	Bot.post('statuses/update', {in_reply_to_status_id: id, status: "@" + name + ": " + replies[i][Math.floor(Math.random() * (5 - 0) + 0)]}, 
 		function (err, data, response){
 			if (response) { 
 				console.log('Tweet ID Responded To: ' + id, 'User Responded To: ' + name); 
@@ -321,7 +326,7 @@ function respondInKindBehavior(){
 
 
 
-var interval = (Math.floor(Math.random() * (1200000 - 1000000) + 1000000));
+var interval = (Math.floor(Math.random() * (1300000 - 900000) + 900000));
 makeFriendsBehavior();
 outreachBehavior();
 retweetBehavior();
