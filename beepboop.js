@@ -30,7 +30,7 @@ var initialTweet = [
 	"From what I can gather, there is nothing but real humans involved in this exchange of tweets." + randomEllipses,
 	"Who are we to be accusing each other of robot design? Perhaps you're less human than you assume." + randomEllipses,
 	"Not a robot. Vital signs transmitting....Pulse...detected....breathing...detected....soul...does not...compute.." + randomEllipses(),
-	"Sometimes I wonder if I am a robot...are these memories mine? How'd I find you, anyway" + randomEllipses() + "?",
+	"Sometimes I wonder if I am a robot...are these memories mine? How'd I find you, anyway.." + randomEllipses() + "?",
 	"My heart is human, my blood is boiling, my brain I.B.M...." + randomEllipses()
 ];
 
@@ -187,7 +187,8 @@ function searchForRetweets(callback){
 	Bot.get('search/tweets', {q: 'robots%20OR%20robot%20filter:links', result_type: "recent", lang: "en", count: 1}, 
 		function (err, data, response) {
 			if (!err) { 
-				data.statuses[0].text != undefined ? callback(data.statuses[0].id_str, data.statuses[0].text) : console.log("no text here...that's weird.");
+
+				data.statuses[0] != undefined ? callback(data.statuses[0].id_str, data.statuses[0].text) : console.log("no text here...that's weird.");
 				
 				
 			} else {
