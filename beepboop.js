@@ -8,10 +8,10 @@ app.listen(process.env.PORT || 5000);
 
 var Twit = require('twit');
 var Bot = new Twit({
-	consumer_key: process.env.consumer_key
-	, consumer_secret: process.env.consumer_secret
-	, access_token: process.env.access_token
-	, access_token_secret: process.env.access_token_secret
+	consumer_key: process.env.CONSUMER_KEY
+	, consumer_secret: process.env.CONSUMER_SECRET
+	, access_token: process.env.ACCESS_TOKEN
+	, access_token_secret: process.env.ACCESS_TOKEN_SECRET
 });
 
 function randomEllipses(){
