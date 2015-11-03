@@ -4,14 +4,21 @@ var app = express();
 app.get('/', function(req, res){ res.send('The robot is happily running.'); });
 app.listen(process.env.PORT || 5000);
 // END HEROKU SETUP
-	
+
+var CONSUMER_KEY = process.env['CONSUMER_KEY'];
+var CONSUMER_SECRET = process.env['CONSUMER_SECRET'];
+var ACCESS_TOKEN = process.env['ACCESS_TOKEN'];
+var ACCESS_TOKEN_SECRET = process.env['ACCESS_TOKEN_SECRET'];
+
+console.log(CONSUMER_SECRET);
+
 
 var Twit = require('twit');
 var Bot = new Twit({
-	consumer_key: process.env.CONSUMER_KEY
-	, consumer_secret: process.env.CONSUMER_SECRET
-	, access_token: process.env.ACCESS_TOKEN
-	, access_token_secret: process.env.ACCESS_TOKEN_SECRET
+	consumer_key: CONSUMER_KEY
+	, consumer_secret: CONSUMER_SECRET
+	, access_token: ACCESS_TOKEN
+	, access_token_secret: ACCESS_TOKEN_SECRET
 });
 
 function randomEllipses(){
