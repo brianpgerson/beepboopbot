@@ -327,7 +327,7 @@ function respondInKindBehavior(){
 
 
 
-var interval = (Math.floor(Math.random() * (130000 - 90000) + 90000));
+var interval = (Math.floor(Math.random() * (1300000 - 900000) + 900000));
 makeFriendsBehavior();
 outreachBehavior();
 retweetBehavior();
