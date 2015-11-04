@@ -5,10 +5,6 @@ app.get('/', function(req, res){ res.send('The robot is happily running.'); });
 app.listen(process.env.PORT || 5000);
 // END HEROKU SETUP
 
-// if(!process.env.CONSUMER_KEY) {
-//   var env = require('./env.js')
-// }
-
 
 var Twit = require('twit');
 var Bot = new Twit({
