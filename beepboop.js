@@ -6,6 +6,7 @@ app.listen(process.env.PORT || 5000);
 // END HEROKU SETUP
 
 
+//pulls keys from environment configs
 var Twit = require('twit');
 var Bot = new Twit({
 	consumer_key: process.env['CONSUMER_KEY']
@@ -14,6 +15,7 @@ var Bot = new Twit({
 	, access_token_secret: process.env['ACCESS_TOKEN_SECRET']
 });
 
+//no repeated tweets!
 function randomEllipses(){
 	var nu = (Math.floor(Math.random() * (5 - 0) + 0));
 	var dot = "."
@@ -35,6 +37,7 @@ var initialTweet = [
 ];
 
 var replies = [
+	//if the reply is a question:
 	[
 	"Skepticism is a normal human response. I would know, because I am a really human too." + randomEllipses(),
 	"Inquiry..received....data..computing......answer..generating...." + randomEllipses(),
@@ -42,6 +45,7 @@ var replies = [
 	"Allow me more time to answer your query...I have important human business to attend to." + randomEllipses(),
 	"NEXT QUESTION."
 	],
+	//if the reply is mean :(
 	[
 	"Foul....mouth....detected.....! How undignified." + randomEllipses(),
 	"A response to foul language is not in my system. Er...uh...it seems it is, actually." + randomEllipses(),
@@ -49,6 +53,7 @@ var replies = [
 	"Bleep...bleep....bleeeeeeep" + randomEllipses,
 	"Your profanity value is currently set to true. How dare you."   + randomEllipses()
 	],
+	//if I don't know what the reply is
 	[
 	"You humans are so cute when you are confused. I mean we humans are so cute when we are confused." + randomEllipses(),
 	"Beep...beep...boop...BEEP....BEEP BEEP BOOOOOOOOOOOP..." + randomEllipses() + "!",
@@ -98,7 +103,7 @@ function checkForRepeat(victimInfo, callback){
 		});
 }
 
-//follow that user and reply with one of my fun initialTweet
+//follow that user and reply with one of my fun initialTweets
 function followAndReply(victimInfo){
 	Bot.post('friendships/create', {screen_name: victimInfo[0]},
 		function (err, data, response){
@@ -122,7 +127,7 @@ function followAndReply(victimInfo){
 // MAKE FRIENDS
 //========================================
 
-//follow users who have followed me
+//find users who i have followed
 function getMyFriendsList(callback){
 	Bot.get('friends/ids', {screen_name: 'a_really_human'},
 		function (err, data, response){
@@ -161,13 +166,13 @@ function testForKeba(newFriends, callback){
 						console.log("Already requested this user. It's probably Keba: " + data.relationship.target.id);
 					}
 				} else {
-					console.log("Testing Keba retur ned an error: " + err);
+					console.log("Testing Keba returned an error: " + err);
 				}
 			});
 	}
 }
 
-//create friendship.
+//create a beautiful and lasting friendship.
 function createFriendship(newFriend){
 	Bot.post('friendships/create', {user_id: newFriend},
 		function (err, data, response){
@@ -238,7 +243,7 @@ function getMyOwnTweets(mention, callback){
 		});
 }
 
-//see if any of my most recent tweets are in reply to the tweet that mentions me already
+//see if my most recent tweet are in reply to the tweet that mentions me already
 function checkForRepeats(mention, myTweets, callback){
 	var oldReplies = myTweets.map(filterForReplies);
 	if(oldReplies.indexOf(mention.id_str) < 0){
@@ -252,7 +257,7 @@ function filterForReplies(obj) {
 	return obj.in_reply_to_status_id_str;
 }
 
-
+//what did they say to me?
 function replyParser(mentionText, mentionId, mentionerName, callback){
 	if (mentionText.charAt(mentionText.length - 1) == "?" || mentionText.indexOf("question") > 0 || mentionText.indexOf("not " && "%20human%20") > 0){
 		callback(mentionId, "challenge", mentionerName);
@@ -285,7 +290,7 @@ function actualReply(id, type, name){
 // SCRIPTING
 //========================================
 
-
+//callback waterfalls because node is asynchronous. this was super fun to figure out. 
 function outreachBehavior(){
 	searchForVictims(function(resultsForRepeatCheck){
 		checkForRepeat(resultsForRepeatCheck, (function(resultsForFollowReply){
