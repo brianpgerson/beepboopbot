@@ -86,7 +86,8 @@ function searchForVictims(callback){
 }
 
 //grab my last tweet to make sure I don't repeat a reply to the same person.
-//check by comparing my last tweet's 'reply to' ID against the ID I just pulled
+//check by comparing my last tweet's 'reply to' ID against the ID I just pulled. also
+//need to get this up again.
 function checkForRepeat(victimInfo, callback){
 	Bot.get('statuses/user_timeline', {screen_name: 'a_really_human', include_rts: false}, 
 		function (err, data, response){
