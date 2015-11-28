@@ -27,7 +27,7 @@ function randomEllipses(){
 
 var initialTweet = [
 	"The question is: are you sure you're not a robot? How would you know for sure.." + randomEllipses() + "?" ,
-	"I am a real human. I have dreams and I am breathing real breaths.." + randomEllipses(),
+	"I am a real human. I have real dreams and I am breathing actual breaths.." + randomEllipses(),
 	'"More human than human" is our motto' + randomEllipses(),
 	"From what I can gather, there is nothing but real humans involved in this exchange of tweets." + randomEllipses,
 	"Who are we to be accusing each other of robot design? Perhaps you're less human than you assume." + randomEllipses,
